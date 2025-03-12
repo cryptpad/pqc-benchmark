@@ -1,0 +1,245 @@
+{
+    "Kyber": {
+        "ML-KEM512": {
+            "keyGenTime": {
+                "value": 470.163,
+                "unit": "ms",
+                "converted": "0.470 sec"
+            },
+            "encapsulationTime": {
+                "value": 543.634,
+                "unit": "ms",
+                "converted": "0.544 sec"
+            },
+            "decapsulationTime": {
+                "value": 523.121,
+                "unit": "ms",
+                "converted": "0.523 sec"
+            },
+            "keySize": {
+                "value": "2.38",
+                "unit": "KB"
+            },
+            "ciphertextSize": {
+                "value": 768,
+                "unit": "B"
+            },
+            "sharedSecretSize": {
+                "value": 32,
+                "unit": "B"
+            }
+        },
+        "ML-KEM768": {
+            "keyGenTime": {
+                "value": 708.927,
+                "unit": "ms",
+                "converted": "0.709 sec"
+            },
+            "encapsulationTime": {
+                "value": 851.391,
+                "unit": "ms",
+                "converted": "0.851 sec"
+            },
+            "decapsulationTime": {
+                "value": 864.776,
+                "unit": "ms",
+                "converted": "0.865 sec"
+            },
+            "keySize": {
+                "value": "3.50",
+                "unit": "KB"
+            },
+            "ciphertextSize": {
+                "value": "1.06",
+                "unit": "KB"
+            },
+            "sharedSecretSize": {
+                "value": 32,
+                "unit": "B"
+            }
+        },
+        "ML-KEM1024": {
+            "keyGenTime": {
+                "value": 1125.181,
+                "unit": "ms",
+                "converted": "1.125 sec"
+            },
+            "encapsulationTime": {
+                "value": 1290.35,
+                "unit": "ms",
+                "converted": "1.290 sec"
+            },
+            "decapsulationTime": {
+                "value": 1352.722,
+                "unit": "ms",
+                "converted": "1.353 sec"
+            },
+            "keySize": {
+                "value": "4.63",
+                "unit": "KB"
+            },
+            "ciphertextSize": {
+                "value": "1.53",
+                "unit": "KB"
+            },
+            "sharedSecretSize": {
+                "value": 32,
+                "unit": "B"
+            }
+        }
+    },
+    "Dilithium": {
+        "ML-DSA44": {
+            "keyGenTime": {
+                "value": 2116.393,
+                "unit": "ms",
+                "converted": "2.116 sec"
+            },
+            "signingTime": {
+                "value": 4054.6,
+                "unit": "ms",
+                "converted": "4.055 sec"
+            },
+            "verificationTime": {
+                "value": 4906.889,
+                "unit": "ms",
+                "converted": "4.907 sec"
+            },
+            "keySize": {
+                "value": "3.78",
+                "unit": "KB"
+            },
+            "signatureSize": {
+                "value": "2.36",
+                "unit": "KB"
+            }
+        },
+        "ML-DSA65": {
+            "keyGenTime": {
+                "value": 8518.196,
+                "unit": "ms",
+                "converted": "8.518 sec"
+            },
+            "signingTime": {
+                "value": 33793.233,
+                "unit": "ms",
+                "converted": "33.793 sec"
+            },
+            "verificationTime": {
+                "value": 7914.586,
+                "unit": "ms",
+                "converted": "7.915 sec"
+            },
+            "keySize": {
+                "value": "5.84",
+                "unit": "KB"
+            },
+            "signatureSize": {
+                "value": "3.23",
+                "unit": "KB"
+            }
+        },
+        "ML-DSA87": {
+            "keyGenTime": {
+                "value": 12617.67,
+                "unit": "ms",
+                "converted": "12.618 sec"
+            },
+            "signingTime": {
+                "value": 21454.682,
+                "unit": "ms",
+                "converted": "21.455 sec"
+            },
+            "verificationTime": {
+                "value": 13842.566,
+                "unit": "ms",
+                "converted": "13.843 sec"
+            },
+            "keySize": {
+                "value": "7.31",
+                "unit": "KB"
+            },
+            "signatureSize": {
+                "value": "4.52",
+                "unit": "KB"
+            }
+        }
+    },
+    "SPHINCS+": {
+        "SLH-DSA-128F": {
+            "keyGenTime": {
+                "value": 2205.647,
+                "unit": "ms",
+                "converted": "2.206 sec"
+            },
+            "signingTime": {
+                "value": 51129.01,
+                "unit": "ms",
+                "converted": "51.129 sec"
+            },
+            "verificationTime": {
+                "value": 3199.974,
+                "unit": "ms",
+                "converted": "3.200 sec"
+            },
+            "keySize": {
+                "value": 96,
+                "unit": "B"
+            },
+            "signatureSize": {
+                "value": "16.69",
+                "unit": "KB"
+            }
+        },
+        "SLH-DSA-192F": {
+            "keyGenTime": {
+                "value": 3207.371,
+                "unit": "ms",
+                "converted": "3.207 sec"
+            },
+            "signingTime": {
+                "value": 87052.337,
+                "unit": "ms",
+                "converted": "87.052 sec"
+            },
+            "verificationTime": {
+                "value": 2495.928,
+                "unit": "ms",
+                "converted": "2.496 sec"
+            },
+            "keySize": {
+                "value": 144,
+                "unit": "B"
+            },
+            "signatureSize": {
+                "value": "34.83",
+                "unit": "KB"
+            }
+        },
+        "SLH-DSA-256F": {
+            "keyGenTime": {
+                "value": 6297.566,
+                "unit": "ms",
+                "converted": "6.298 sec"
+            },
+            "signingTime": {
+                "value": 179388.15,
+                "unit": "ms",
+                "converted": "179.388 sec"
+            },
+            "verificationTime": {
+                "value": 4730.986,
+                "unit": "ms",
+                "converted": "4.731 sec"
+            },
+            "keySize": {
+                "value": 192,
+                "unit": "B"
+            },
+            "signatureSize": {
+                "value": "48.69",
+                "unit": "KB"
+            }
+        }
+    }
+}

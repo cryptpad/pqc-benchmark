@@ -1,0 +1,17 @@
+{
+  "name": "Benchmarking",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Scripts/Benchmark_script.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "private": true,
+  "dependencies": {
+    "@noble/post-quantum": "^0.4.0",
+    "@scintilla-network/signatures": "github:Scintilla-Network/signatures",
+    "crystals-kyber-js": "^2.3.1",
+    "hpke-js": "^1.6.2"
+  }
+}
