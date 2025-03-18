@@ -159,7 +159,7 @@ async function benchmark() {
 
     console.log("\no7 Benchmark Completed.");
 
-    fs.writeFileSync("../Results/benchmark_results.json", JSON.stringify(benchmarkResults, null, 4));
+    fs.writeFileSync("../Results/benchmark_results(Pure Node).json", JSON.stringify(benchmarkResults, null, 4));
     console.log("\no7 Benchmark results saved to 'benchmark_results.json'");
 }
 

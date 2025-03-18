@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser PQC Benchmark</title>
+    <script type="module">
+        import { ml_kem512, ml_kem768, ml_kem1024 } from "https://cdn.jsdelivr.net/npm/@noble/post-quantum/ml-kem/+esm";
+        import { ml_dsa44, ml_dsa65, ml_dsa87 } from "https://cdn.jsdelivr.net/npm/@noble/post-quantum/ml-dsa/+esm";
+        import { slh_dsa_sha2_128f, slh_dsa_sha2_192f, slh_dsa_sha2_256f } from "https://cdn.jsdelivr.net/npm/@noble/post-quantum/slh-dsa/+esm";
+        import { utf8ToBytes, randomBytes } from "https://cdn.jsdelivr.net/npm/@noble/post-quantum/utils/+esm";
+
+        const ITERATIONS = 30000;
+        const SPHINCS_ITERATIONS = 30000;
+
+        const benchmarkResults = {
+            "Kyber": {},
+            "Dilithium": {},
+            "SPHINCS+": {}
+        };
+
+        function convertMsToMinutes(ms) {
+            return (ms / 60000).toFixed(3) + " min";
+        }
+
+        function formatBytes(bytes) {
+            return { value: bytes, unit: "B" };
+        }
+
+        async function measureTime(fn, iterations) {
+            const start = performance.now();
+            for (let i = 0; i < iterations; i++) await fn();
+            const end = performance.now();
+            const timeTakenMs = (end - start).toFixed(3);
+            return {
+                value: parseFloat(timeTakenMs),
+                unit: "ms",
+                converted: convertMsToMinutes(timeTakenMs)
+            };
+        }
+
+        async function benchmarkKyber(algorithm, name) {
+            console.log(`[-] Benchmarking ${name}...`);
+            const seed = randomBytes(64);
+
+            const keyGenTime = await measureTime(() => algorithm.keygen(seed), ITERATIONS);
+            const keys = algorithm.keygen(seed);
+            const { publicKey, secretKey } = keys;
+
+            const encapsulationTime = await measureTime(() => algorithm.encapsulate(publicKey), ITERATIONS);
+            const { cipherText, sharedSecret } = algorithm.encapsulate(publicKey);
+
+            const decapsulationTime = await measureTime(() => algorithm.decapsulate(cipherText, secretKey), ITERATIONS);
+
+            benchmarkResults.Kyber[name] = {
+                keyGenTime,
+                encapsulationTime,
+                decapsulationTime,
+                keySize: formatBytes(publicKey.length + secretKey.length),
+                ciphertextSize: formatBytes(cipherText.length),
+                sharedSecretSize: formatBytes(sharedSecret.length)
+            };
+        }
+
+        async function benchmarkDilithium(algorithm, name) {
+            console.log(`[-] Benchmarking ${name}...`);
+            const message = utf8ToBytes("hello noble");
+            const seed = randomBytes(32);
+
+            const keyGenTime = await measureTime(() => algorithm.keygen(seed), ITERATIONS);
+            const keys = algorithm.keygen(seed);
+
+            const signingTime = await measureTime(() => algorithm.sign(keys.secretKey, message), ITERATIONS);
+            const signature = algorithm.sign(keys.secretKey, message);
+
+            const verificationTime = await measureTime(() => algorithm.verify(keys.publicKey, message, signature), ITERATIONS);
+
+            benchmarkResults.Dilithium[name] = {
+                keyGenTime,
+                signingTime,
+                verificationTime,
+                keySize: formatBytes(keys.publicKey.length + keys.secretKey.length),
+                signatureSize: formatBytes(signature.length)
+            };
+        }
+
+        async function benchmarkSPHINCS(algorithm, name, seedSize) {
+            console.log(`[-] Benchmarking ${name}...`);
+            const message = utf8ToBytes("hello noble");
+            const seed = randomBytes(seedSize);
+
+            const keyGenTime = await measureTime(() => algorithm.keygen(seed), SPHINCS_ITERATIONS);
+            const keys = algorithm.keygen(seed);
+
+            const signingTime = await measureTime(() => algorithm.sign(keys.secretKey, message), SPHINCS_ITERATIONS);
+            const signature = algorithm.sign(keys.secretKey, message);
+
+            const verificationTime = await measureTime(() => algorithm.verify(keys.publicKey, message, signature), SPHINCS_ITERATIONS);
+
+            benchmarkResults["SPHINCS+"][name] = {
+                keyGenTime,
+                signingTime,
+                verificationTime,
+                keySize: formatBytes(keys.publicKey.length + keys.secretKey.length),
+                signatureSize: formatBytes(signature.length)
+            };
+        }
+
+        async function runBenchmark() {
+            console.log("[x] Running Post-Quantum Cryptography Benchmark in Browser...");
+
+            await benchmarkKyber(ml_kem512, "ML-KEM512");
+            await benchmarkKyber(ml_kem768, "ML-KEM768");
+            await benchmarkKyber(ml_kem1024, "ML-KEM1024");
+
+            await benchmarkDilithium(ml_dsa44, "ML-DSA44");
+            await benchmarkDilithium(ml_dsa65, "ML-DSA65");
+            await benchmarkDilithium(ml_dsa87, "ML-DSA87");
+
+            await benchmarkSPHINCS(slh_dsa_sha2_128f, "SLH-DSA-128F", 48);
+            await benchmarkSPHINCS(slh_dsa_sha2_192f, "SLH-DSA-192F", 72);
+            await benchmarkSPHINCS(slh_dsa_sha2_256f, "SLH-DSA-256F", 96);
+
+            console.log("[x]Benchmark completed!");
+
+            document.getElementById("downloadBtn").style.display = "block";
+            document.getElementById("downloadBtn").onclick = function () {
+                const blob = new Blob([JSON.stringify(benchmarkResults, null, 4)], { type: "application/json" });
+                const a = document.createElement("a");
+                a.href = URL.createObjectURL(blob);
+                a.download = "browser_pqc_benchmark.json";
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            };
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("startBtn").onclick = runBenchmark;
+        });
+    </script>
+</head>
+<body>
+<h2>Browser Post-Quantum Cryptography Benchmark</h2>
+<p>Click the button below to start benchmarking. Open Developer Console (F12 → Console Tab) for real-time logs.</p>
+<button id="startBtn">Start Benchmark</button>
+<button id="downloadBtn" style="display: none;">Download Results</button>
+</body>
+</html>

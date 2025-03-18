@@ -23,7 +23,7 @@
 <script>
     async function loadBenchmarkData() {
         try {
-            const response = await fetch("../Results/benchmark_results.json");
+            const response = await fetch("../Results/browser_pqc_benchmark(Firefox).json");
             const jsonData = await response.json();
             generateKyberTimeGraph(jsonData);
             generateKyberSizeGraph(jsonData);
