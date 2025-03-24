@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benchmark Graphs</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<h2>Falcon Time Benchmark (Seconds)</h2>
+<canvas id="falconTimeChart"></canvas>
+
+<h2>Falcon Size Benchmark (Bytes)</h2>
+<canvas id="falconSizeChart"></canvas>
+
+<h2>Dilithium Time Benchmark (Seconds)</h2>
+<canvas id="dilithiumTimeChart"></canvas>
+
+<h2>Dilithium Size Benchmark (Bytes)</h2>
+<canvas id="dilithiumSizeChart"></canvas>
+
+<script>
+    async function loadBenchmarkData() {
+        try {
+            const response = await fetch("../Results/Falcon(Chrome).json");
+            const jsonData = await response.json();
+            generateFalconTimeGraph(jsonData);
+            generateFalconSizeGraph(jsonData);
+            generateDilithiumTimeGraph(jsonData);
+            generateDilithiumSizeGraph(jsonData);
+        } catch (error) {
+            console.error("Error loading JSON:", error);
+        }
+    }
+
+
+    function convertMsToMinutes(ms) {
+        return (ms / 60000);
+    }
+
+
+    function parseSizeToBytes(value, unit) {
+        if (unit === "KB") return parseFloat(value) * 1024;
+        if (unit === "MB") return parseFloat(value) * 1024 * 1024;
+        return parseFloat(value); // Default to bytes (B)
+    }
+
+
+    function generateFalconTimeGraph(data) {
+        const algorithms = [];
+        const keyGenTimes = [];
+        const signTimes = [];
+        const openTimes = [];
+        const signDetachedTimes = [];
+        const verifyDetachedTimes = [];
+
+        algorithms.push("Falcon");
+        keyGenTimes.push(convertMsToMinutes(data["Falcon"].keyGenTime.value));
+        signTimes.push(convertMsToMinutes(data["Falcon"].signTime.value));
+        openTimes.push(convertMsToMinutes(data["Falcon"].openTime.value));
+        signDetachedTimes.push(convertMsToMinutes(data["Falcon"].signDetachedTime.value));
+        verifyDetachedTimes.push(convertMsToMinutes(data["Falcon"].verifyDetachedTime.value));
+
+        new Chart(document.getElementById("falconTimeChart").getContext("2d"), {
+            type: "bar",
+            data: {
+                labels: algorithms,
+                datasets: [
+                    { label: "KeyGen Time (Minutes)", data: keyGenTimes, backgroundColor: "rgba(54, 162, 235, 0.6)" },
+                    { label: "Sign Time (Minutes)", data: signTimes, backgroundColor: "rgba(255, 99, 132, 0.6)" },
+                    { label: "Open Time (Minutes)", data: openTimes, backgroundColor: "rgba(75, 192, 192, 0.6)" },
+                    { label: "Sign Detached Time (Minutes)", data: signDetachedTimes, backgroundColor: "rgba(153, 102, 255, 0.6)" },
+                    { label: "Verify Detached Time (Minutes)", data: verifyDetachedTimes, backgroundColor: "rgba(255, 159, 64, 0.6)" }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: { y: { beginAtZero: true, title: { display: true, text: "Time (Minutes)" } } }
+            }
+        });
+    }
+
+
+    function generateFalconSizeGraph(data) {
+        const algorithms = ["Falcon"];
+        const signatureSizes = [parseSizeToBytes(data["Falcon"].signatureSize.value, data["Falcon"].signatureSize.unit)];
+        const signedSizes = [parseSizeToBytes(data["Falcon"].signedSize.value, data["Falcon"].signedSize.unit)];
+        const verifiedSizes = [parseSizeToBytes(data["Falcon"].verifiedSize.value, data["Falcon"].verifiedSize.unit)];
+
+        new Chart(document.getElementById("falconSizeChart").getContext("2d"), {
+            type: "bar",
+            data: {
+                labels: algorithms,
+                datasets: [
+                    { label: "Signature Size (Bytes)", data: signatureSizes, backgroundColor: "rgba(54, 162, 235, 0.6)" },
+                    { label: "Signed Size (Bytes)", data: signedSizes, backgroundColor: "rgba(255, 99, 132, 0.6)" },
+                    { label: "Verified Size (Bytes)", data: verifiedSizes, backgroundColor: "rgba(75, 192, 192, 0.6)" }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: { y: { beginAtZero: true, title: { display: true, text: "Size (Bytes)" } } }
+            }
+        });
+    }
+
+
+    function generateDilithiumTimeGraph(data) {
+        const algorithms = [];
+        const keyGenTimes = [];
+        const signTimes = [];
+        const openTimes = [];
+        const signDetachedTimes = [];
+        const verifyDetachedTimes = [];
+
+        algorithms.push("Dilithium");
+        keyGenTimes.push(convertMsToMinutes(data["Dilithium"].keyGenTime.value));
+        signTimes.push(convertMsToMinutes(data["Dilithium"].signTime.value));
+        openTimes.push(convertMsToMinutes(data["Dilithium"].openTime.value));
+        signDetachedTimes.push(convertMsToMinutes(data["Dilithium"].signDetachedTime.value));
+        verifyDetachedTimes.push(convertMsToMinutes(data["Dilithium"].verifyDetachedTime.value));
+
+        new Chart(document.getElementById("dilithiumTimeChart").getContext("2d"), {
+            type: "bar",
+            data: {
+                labels: algorithms,
+                datasets: [
+                    { label: "KeyGen Time (Minutes)", data: keyGenTimes, backgroundColor: "rgba(54, 162, 235, 0.6)" },
+                    { label: "Sign Time (Minutes)", data: signTimes, backgroundColor: "rgba(255, 99, 132, 0.6)" },
+                    { label: "Open Time (Minutes)", data: openTimes, backgroundColor: "rgba(75, 192, 192, 0.6)" },
+                    { label: "Sign Detached Time (Minutes)", data: signDetachedTimes, backgroundColor: "rgba(153, 102, 255, 0.6)" },
+                    { label: "Verify Detached Time (Minutes)", data: verifyDetachedTimes, backgroundColor: "rgba(255, 159, 64, 0.6)" }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: { y: { beginAtZero: true, title: { display: true, text: "Time (Minutes)" } } }
+            }
+        });
+    }
+
+    function generateDilithiumSizeGraph(data) {
+        const algorithms = ["Dilithium"];
+        const signatureSizes = [parseSizeToBytes(data["Dilithium"].signatureSize.value, data["Dilithium"].signatureSize.unit)];
+        const signedSizes = [parseSizeToBytes(data["Dilithium"].signedSize.value, data["Dilithium"].signedSize.unit)];
+        const verifiedSizes = [parseSizeToBytes(data["Dilithium"].verifiedSize.value, data["Dilithium"].verifiedSize.unit)];
+
+        new Chart(document.getElementById("dilithiumSizeChart").getContext("2d"), {
+            type: "bar",
+            data: {
+                labels: algorithms,
+                datasets: [
+                    { label: "Signature Size (Bytes)", data: signatureSizes, backgroundColor: "rgba(54, 162, 235, 0.6)" },
+                    { label: "Signed Size (Bytes)", data: signedSizes, backgroundColor: "rgba(255, 99, 132, 0.6)" },
+                    { label: "Verified Size (Bytes)", data: verifiedSizes, backgroundColor: "rgba(75, 192, 192, 0.6)" }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: { y: { beginAtZero: true, title: { display: true, text: "Size (Bytes)" } } }
+            }
+        });
+    }
+
+    /*
+    function generateSPHINCSTimeGraph(){
+
+    }
+
+    function generateSPHINCSSizeGraph(){
+
+    } */
+
+
+    loadBenchmarkData();
+</script>
+
+</body>
+</html>
