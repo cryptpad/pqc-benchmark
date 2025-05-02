@@ -17,3 +17,4 @@ export async function measureTime(fn, iterations, timeConverter = ms => ms) {
   const ms = end - start;
   return { value: parseFloat(ms.toFixed(3)), unit: "ms", converted: timeConverter(ms) };
 }
+
