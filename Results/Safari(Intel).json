@@ -1,0 +1,51 @@
+{
+  "Kyber": {
+    "ML-KEM512": {
+      "keyGenTime": { "value": 164266, "unit": "ms", "converted": "2.738 min" },
+      "encapsulationTime": { "value": 171723, "unit": "ms", "converted": "2.862 min" },
+      "decapsulationTime": { "value": 188108, "unit": "ms", "converted": "3.135 min" },
+      "keySize": { "value": 2432, "unit": "B" },
+      "ciphertextSize": { "value": 768, "unit": "B" },
+      "sharedSecretSize": { "value": 32, "unit": "B" }
+    },
+    "ML-KEM768": {
+      "keyGenTime": { "value": 264664, "unit": "ms", "converted": "4.411 min" },
+      "encapsulationTime": { "value": 285864, "unit": "ms", "converted": "4.764 min" },
+      "decapsulationTime": { "value": 305894, "unit": "ms", "converted": "5.098 min" },
+      "keySize": { "value": 3584, "unit": "B" },
+      "ciphertextSize": { "value": 1088, "unit": "B" },
+      "sharedSecretSize": { "value": 32, "unit": "B" }
+    },
+    "ML-KEM1024": {
+      "keyGenTime": { "value": 420295, "unit": "ms", "converted": "7.005 min" },
+      "encapsulationTime": { "value": 442620, "unit": "ms", "converted": "7.377 min" },
+      "decapsulationTime": { "value": 466360, "unit": "ms", "converted": "7.773 min" },
+      "keySize": { "value": 4736, "unit": "B" },
+      "ciphertextSize": { "value": 1568, "unit": "B" },
+      "sharedSecretSize": { "value": 32, "unit": "B" }
+    }
+  },
+  "Dilithium": {
+    "ML-DSA44": {
+      "keyGenTime": { "value": 563721, "unit": "ms", "converted": "9.395 min" },
+      "signingTime": { "value": 742449, "unit": "ms", "converted": "12.374 min" },
+      "verificationTime": { "value": 606851, "unit": "ms", "converted": "10.114 min" },
+      "keySize": { "value": 3872, "unit": "B" },
+      "signatureSize": { "value": 2420, "unit": "B" }
+    },
+    "ML-DSA65": {
+      "keyGenTime": { "value": 999224, "unit": "ms", "converted": "16.654 min" },
+      "signingTime": { "value": 1493104, "unit": "ms", "converted": "24.885 min" },
+      "verificationTime": { "value": 1040670, "unit": "ms", "converted": "17.345 min" },
+      "keySize": { "value": 5984, "unit": "B" },
+      "signatureSize": { "value": 3309, "unit": "B" }
+    },
+    "ML-DSA87": {
+      "keyGenTime": { "value": 1717916, "unit": "ms", "converted": "28.632 min" },
+      "signingTime": { "value": 2346048, "unit": "ms", "converted": "39.101 min" },
+      "verificationTime": { "value": 1809471, "unit": "ms", "converted": "30.158 min" },
+      "keySize": { "value": 7488, "unit": "B" },
+      "signatureSize": { "value": 4627, "unit": "B" }
+    }
+  }
+}

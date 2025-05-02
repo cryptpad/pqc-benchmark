@@ -1,0 +1,22 @@
+{
+  "Dilithium": {
+    "keyGenTime": { "value": 10782, "unit": "ms", "converted": "10.782 sec" },
+    "openTime": { "value": 10681, "unit": "ms", "converted": "10.681 sec" },
+    "signDetachedTime": { "value": 13761, "unit": "ms", "converted": "13.761 sec" },
+    "signTime": { "value": 13941, "unit": "ms", "converted": "13.941 sec" },
+    "signatureSize": { "value": 4597, "unit": "B" },
+    "signedSize": { "value": 4603, "unit": "B" },
+    "verifiedSize": { "value": 6, "unit": "B" },
+    "verifyDetachedTime": { "value": 10265, "unit": "ms", "converted": "10.265 sec" }
+  },
+  "Falcon": {
+    "keyGenTime": { "value": 1507845, "unit": "ms", "converted": "1507.845 sec" },
+    "openTime": { "value": 4170, "unit": "ms", "converted": "4.170 sec" },
+    "signDetachedTime": { "value": 318773, "unit": "ms", "converted": "318.773 sec" },
+    "signTime": { "value": 319512, "unit": "ms", "converted": "319.512 sec" },
+    "signatureSize": { "value": 1332, "unit": "B" },
+    "signedSize": { "value": 1338, "unit": "B" },
+    "verifiedSize": { "value": 6, "unit": "B" },
+    "verifyDetachedTime": { "value": 3792, "unit": "ms", "converted": "3.792 sec" }
+  }
+}

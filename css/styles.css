@@ -1,0 +1,9 @@
+body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 20px; }
+h1, h2, h3 { color: #333; }
+#benchmarkOptions { background: #fff; padding: 15px; box-shadow: 0 0 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+label { margin-right: 10px; }
+input[type="number"] { width: 80px; margin-left: 5px; }
+button { padding: 10px 20px; background: #4CAF50; color: #fff; border: none; cursor: pointer; }
+button:hover { background: #45a049; }
+.chartContainer { margin-top: 20px; padding: 10px; background: #fff; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+canvas { background: #fff; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
