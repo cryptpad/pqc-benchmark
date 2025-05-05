@@ -10,7 +10,6 @@ let benchmarkResults = {};
 
 export async function runAllBenchmarks() {
   benchmarkResults = {};
-  // Get benchmark options from the DOM
   const kyberEnabled     = document.getElementById("checkbox_kyber").checked;
   const mlDilEnabled     = document.getElementById("checkbox_ml_dilithium").checked;
   const falconEnabled    = document.getElementById("checkbox_falcon").checked;
@@ -31,6 +30,141 @@ export async function runAllBenchmarks() {
 
   document.getElementById("downloadBtn").style.display = "block";
   generateGraphs();
+  generateSizesTable();
+}
+
+function generateSizesTable() {
+  const tableContainer = document.getElementById("sizeTableContainer");
+  tableContainer.style.display = "block";
+
+  tableContainer.innerHTML = `
+    <h2>Key and Ciphertext/Signature Sizes (Bytes)</h2>
+    <div class="table-responsive">
+      <table id="sizesTable">
+        <thead>
+          <tr>
+            <th>Algorithm</th>
+            <th>Key Size</th>
+            <th>Ciphertext/Signature Size</th>
+            <th>Cumulative Size (All Runs)</th>
+          </tr>
+        </thead>
+        <tbody id="sizesTableBody">
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  const tableBody = document.getElementById("sizesTableBody");
+
+  function extractSize(data, propertyNames) {
+    for (const prop of propertyNames) {
+      if (!data[prop]) continue;
+
+      if (typeof data[prop] === 'number') {
+        return data[prop];
+      }
+
+      if (data[prop] && data[prop].value !== undefined) {
+        return data[prop].value;
+      }
+    }
+    return 0;
+  }
+
+  if (benchmarkResults.Kyber) {
+    const iterKyber = Number(document.getElementById("iterations_kyber").value) || 30000;
+    const algoNames = Object.keys(benchmarkResults.Kyber);
+    for (const algo of algoNames) {
+      const row = document.createElement("tr");
+      const data = benchmarkResults.Kyber[algo];
+      const keySize = extractSize(data, ['keySize', 'publicKeySize']);
+      const ciphertextSize = extractSize(data, ['ciphertextSize']);
+      const cumulativeSize = (keySize + ciphertextSize) * iterKyber;
+
+      row.innerHTML = `
+        <td>${algo}</td>
+        <td>${keySize}</td>
+        <td>${ciphertextSize}</td>
+        <td>${cumulativeSize.toLocaleString()}</td>
+      `;
+      tableBody.appendChild(row);
+    }
+  }
+
+  if (benchmarkResults.MLDilithium) {
+    const iterMLDil = Number(document.getElementById("iterations_ml_dilithium").value) || 30000;
+    const algoNames = Object.keys(benchmarkResults.MLDilithium);
+    for (const algo of algoNames) {
+      const row = document.createElement("tr");
+      const data = benchmarkResults.MLDilithium[algo];
+      const keySize = extractSize(data, ['keySize', 'publicKeySize']);
+      const signatureSize = extractSize(data, ['signatureSize']);
+      const cumulativeSize = (keySize + signatureSize) * iterMLDil;
+
+      row.innerHTML = `
+        <td>${algo}</td>
+        <td>${keySize}</td>
+        <td>${signatureSize}</td>
+        <td>${cumulativeSize.toLocaleString()}</td>
+      `;
+      tableBody.appendChild(row);
+    }
+  }
+
+  if (benchmarkResults.Falcon) {
+    const iterFalcon = Number(document.getElementById("iterations_falcon").value) || 30000;
+    const row = document.createElement("tr");
+    const data = benchmarkResults.Falcon;
+    const keySize = extractSize(data, ['keySize', 'publicKeySize']);
+    const signatureSize = extractSize(data, ['signatureSize']);
+    const cumulativeSize = (keySize + signatureSize) * iterFalcon;
+
+    row.innerHTML = `
+      <td>Falcon</td>
+      <td>${keySize}</td>
+      <td>${signatureSize}</td>
+      <td>${cumulativeSize.toLocaleString()}</td>
+    `;
+    tableBody.appendChild(row);
+  }
+
+  if (benchmarkResults.CrystalsDilithium) {
+    const iterCrystals = Number(document.getElementById("iterations_crystals").value) || 30000;
+    const row = document.createElement("tr");
+    const data = benchmarkResults.CrystalsDilithium;
+    const keySize = extractSize(data, ['keySize', 'publicKeySize']);
+    const signatureSize = extractSize(data, ['signatureSize']);
+    const cumulativeSize = (keySize + signatureSize) * iterCrystals;
+
+    row.innerHTML = `
+      <td>Crystals Dilithium</td>
+      <td>${keySize}</td>
+      <td>${signatureSize}</td>
+      <td>${cumulativeSize.toLocaleString()}</td>
+    `;
+    tableBody.appendChild(row);
+  }
+
+  if (benchmarkResults["SPHINCS+"]) {
+    const iterSphincs = Number(document.getElementById("iterations_sphincs").value) || 30000;
+    const algoNames = Object.keys(benchmarkResults["SPHINCS+"]);
+    for (const algo of algoNames) {
+      const row = document.createElement("tr");
+      const data = benchmarkResults["SPHINCS+"][algo];
+      const keySize = extractSize(data, ['keySize', 'publicKeySize']);
+      const signatureSize = extractSize(data, ['signatureSize']);
+      const cumulativeSize = (keySize + signatureSize) * iterSphincs;
+
+      row.innerHTML = `
+        <td>${algo}</td>
+        <td>${keySize}</td>
+        <td>${signatureSize}</td>
+        <td>${cumulativeSize.toLocaleString()}</td>
+      `;
+      tableBody.appendChild(row);
+    }
+  }
 }
 
 function generateGraphs() {
@@ -67,6 +201,7 @@ function generateKyberChart() {
       }
     }
   });
+
   document.getElementById("kyberGraphs").style.display = "block";
 }
 
@@ -96,6 +231,7 @@ function generateMLDilithiumChart() {
       }
     }
   });
+
   document.getElementById("mldilGraphs").style.display = "block";
 }
 
@@ -129,9 +265,9 @@ function generateFalconChart() {
       }
     }
   });
+
   document.getElementById("falconGraphs").style.display = "block";
 }
-
 
 function generateCrystalsChart() {
   if (!benchmarkResults.CrystalsDilithium) {
@@ -163,6 +299,7 @@ function generateCrystalsChart() {
       }
     }
   });
+
   document.getElementById("crystalsGraphs").style.display = "block";
 }
 
@@ -192,6 +329,7 @@ function generateSPHINCSChart() {
       }
     }
   });
+
   document.getElementById("sphincsGraphs").style.display = "block";
 }
 
@@ -207,3 +345,4 @@ export function setupUI() {
     document.body.removeChild(a);
   });
 }
+

@@ -12,12 +12,14 @@ export async function benchmarkCrystalsDilithium(iterations, benchmarkResults) {
   const signDetachedTime = await measureTime(() => dilithiumCrystals.signDetached(message, keyPair.privateKey), iterations, convertMsToSeconds);
   const signature = await dilithiumCrystals.signDetached(message, keyPair.privateKey);
   const verifyDetachedTime = await measureTime(() => dilithiumCrystals.verifyDetached(signature, message, keyPair.publicKey), iterations, convertMsToSeconds);
+
   benchmarkResults.CrystalsDilithium = {
     keyGenTime,
     signTime,
     openTime,
     signDetachedTime,
     verifyDetachedTime,
+    keySize: formatBytes(keyPair.publicKey.length),
     signatureSize: formatBytes(signature.length),
     signedSize: formatBytes(signed.length),
     verifiedSize: formatBytes(verified.length)

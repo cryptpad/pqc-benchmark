@@ -12,12 +12,14 @@ export async function benchmarkFalcon(iterations, benchmarkResults) {
   const signDetachedTime = await measureTime(() => falcon.signDetached(message, keyPair.privateKey), iterations, convertMsToSeconds);
   const signature = await falcon.signDetached(message, keyPair.privateKey);
   const verifyDetachedTime = await measureTime(() => falcon.verifyDetached(signature, message, keyPair.publicKey), iterations, convertMsToSeconds);
+
   benchmarkResults.Falcon = {
     keyGenTime,
     signTime,
     openTime,
     signDetachedTime,
     verifyDetachedTime,
+    keySize: formatBytes(keyPair.publicKey.length),
     signatureSize: formatBytes(signature.length),
     signedSize: formatBytes(signed.length),
     verifiedSize: formatBytes(verified.length)

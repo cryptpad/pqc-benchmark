@@ -1,64 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- ...existing head meta tags... -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Combined Post-Quantum Benchmark</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="style/styles.css">
-  </head>
-  <body>
-    <!-- ...existing body content... -->
-    <div id="benchmarkOptions">
-      <h2>Select Schemes and Iterations</h2>
-      <label><input type="checkbox" id="checkbox_kyber" checked> Kyber (ML-KEM)</label>
-      <label for="iterations_kyber"></label><input type="number" id="iterations_kyber" value="30000" min="1"><br>
-      <label><input type="checkbox" id="checkbox_ml_dilithium" checked> ML-Dilithium (ML-DSA)</label>
-      <label for="iterations_ml_dilithium"></label><input type="number" id="iterations_ml_dilithium" value="30000" min="1"><br>
-      <label><input type="checkbox" id="checkbox_falcon" checked> Falcon</label>
-      <label for="iterations_falcon"></label><input type="number" id="iterations_falcon" value="30000" min="1"><br>
-      <label><input type="checkbox" id="checkbox_crystals" checked> Crystals Dilithium</label>
-      <label for="iterations_crystals"></label><input type="number" id="iterations_crystals" value="30000" min="1"><br>
-      <label><input type="checkbox" id="checkbox_sphincs" checked> SPHINCS+</label>
-      <label for="iterations_sphincs"></label><input type="number" id="iterations_sphincs" value="30000" min="1"><br>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post-Quantum Cryptography Benchmark</title>
+  <link rel="stylesheet" href="style/styles.css">
+</head>
+<body>
+<h1>Post-Quantum Cryptography Benchmark</h1>
+
+<div class="controls">
+  <h2>Benchmark Settings</h2>
+
+  <div class="benchmark-grid">
+    <div class="algorithm-section">
+      <h3>Kyber</h3>
+      <div class="control-row">
+        <div class="checkbox-container">
+          <input type="checkbox" id="checkbox_kyber" checked>
+          <label for="checkbox_kyber">Enable</label>
+        </div>
+        <div class="input-container">
+          <label for="iterations_kyber">Iterations:</label>
+          <input type="number" id="iterations_kyber" value="30000" min="1">
+        </div>
+      </div>
     </div>
 
-    <h1>Combined Post-Quantum Benchmark</h1>
-    <button id="startBtn">Start Benchmark</button>
-    <button id="downloadBtn" style="display: none;">Download Results</button>
-
-    <!-- Graph Containers -->
-    <div id="kyberGraphs" class="chartContainer">
-      <h2>Kyber Benchmark Graphs</h2>
-      <h3>Time Benchmark (Minutes)</h3>
-      <canvas id="kyberTimeChart"></canvas>
+    <div class="algorithm-section">
+      <h3>ML-Dilithium</h3>
+      <div class="control-row">
+        <div class="checkbox-container">
+          <input type="checkbox" id="checkbox_ml_dilithium" checked>
+          <label for="checkbox_ml_dilithium">Enable</label>
+        </div>
+        <div class="input-container">
+          <label for="iterations_ml_dilithium">Iterations:</label>
+          <input type="number" id="iterations_ml_dilithium" value="30000" min="1">
+        </div>
+      </div>
     </div>
 
-    <div id="mldilGraphs" class="chartContainer">
-      <h2>ML-Dilithium Benchmark Graphs</h2>
-      <h3>Time Benchmark (Minutes)</h3>
-      <canvas id="mldilTimeChart"></canvas>
+    <div class="algorithm-section">
+      <h3>Falcon</h3>
+      <div class="control-row">
+        <div class="checkbox-container">
+          <input type="checkbox" id="checkbox_falcon" checked>
+          <label for="checkbox_falcon">Enable</label>
+        </div>
+        <div class="input-container">
+          <label for="iterations_falcon">Iterations:</label>
+          <input type="number" id="iterations_falcon" value="30000" min="1">
+        </div>
+      </div>
     </div>
 
-    <div id="sphincsGraphs" class="chartContainer">
-      <h2>SPHINCS+ Benchmark Graphs</h2>
-      <h3>Time Benchmark (Minutes)</h3>
-      <canvas id="sphincsTimeChart"></canvas>
+    <div class="algorithm-section">
+      <h3>Crystals Dilithium</h3>
+      <div class="control-row">
+        <div class="checkbox-container">
+          <input type="checkbox" id="checkbox_crystals" checked>
+          <label for="checkbox_crystals">Enable</label>
+        </div>
+        <div class="input-container">
+          <label for="iterations_crystals">Iterations:</label>
+          <input type="number" id="iterations_crystals" value="30000" min="1">
+        </div>
+      </div>
     </div>
 
-    <div id="falconGraphs" class="chartContainer">
-      <h2>Falcon Benchmark Graphs</h2>
-      <h3>Time Benchmark (Minutes)</h3>
-      <canvas id="falconTimeChart"></canvas>
+    <div class="algorithm-section">
+      <h3>SPHINCS+</h3>
+      <div class="control-row">
+        <div class="checkbox-container">
+          <input type="checkbox" id="checkbox_sphincs" checked>
+          <label for="checkbox_sphincs">Enable</label>
+        </div>
+        <div class="input-container">
+          <label for="iterations_sphincs">Iterations:</label>
+          <input type="number" id="iterations_sphincs" value="30000" min="1">
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div id="crystalsGraphs" class="chartContainer">
-      <h2>Crystals Dilithium Benchmark Graphs</h2>
-      <h3>Time Benchmark (Minutes)</h3>
-      <canvas id="crystalsTimeChart"></canvas>
-    </div>
+  <div class="button-row">
+    <button id="startBtn">Start Benchmarks</button>
+    <button id="downloadBtn">Download Results</button>
+  </div>
+</div>
 
-    <script type="module" src="scripts/main.js"></script>
-  </body>
+<div id="sizeTableContainer" class="table-container" style="display: none;">
+</div>
+
+<div id="kyberGraphs" class="chartContainer">
+  <h2>Kyber Benchmark Graphs</h2>
+  <h3>Time Benchmark (Minutes)</h3>
+  <canvas id="kyberTimeChart"></canvas>
+</div>
+
+<div id="mldilGraphs" class="chartContainer">
+  <h2>ML-Dilithium Benchmark Graphs</h2>
+  <h3>Time Benchmark (Minutes)</h3>
+  <canvas id="mldilTimeChart"></canvas>
+</div>
+
+<div id="sphincsGraphs" class="chartContainer">
+  <h2>SPHINCS+ Benchmark Graphs</h2>
+  <h3>Time Benchmark (Minutes)</h3>
+  <canvas id="sphincsTimeChart"></canvas>
+</div>
+
+<div id="falconGraphs" class="chartContainer">
+  <h2>Falcon Benchmark Graphs</h2>
+  <h3>Time Benchmark (Minutes)</h3>
+  <canvas id="falconTimeChart"></canvas>
+</div>
+
+<div id="crystalsGraphs" class="chartContainer">
+  <h2>Crystals Dilithium Benchmark Graphs</h2>
+  <h3>Time Benchmark (Minutes)</h3>
+  <canvas id="crystalsTimeChart"></canvas>
+</div>
+
+<script type="module" src="scripts/main.js"></script>
+</body>
 </html>
