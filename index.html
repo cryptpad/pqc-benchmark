@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Post-Quantum Cryptography Benchmark</title>
   <link rel="stylesheet" href="style/styles.css">
+  <!-- Include NaCl libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tweetnacl/1.0.3/nacl-fast.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tweetnacl-util@0.15.1/nacl-util.min.js"></script>
+  <!-- Include crypto.js -->
+  <script src="scripts/utils/crypto.js"></script>
 </head>
 <body>
 <h1>Post-Quantum Cryptography Benchmark</h1>
@@ -82,6 +87,34 @@
         </div>
       </div>
     </div>
+
+    <div class="algorithm-section">
+      <h3>ElGamal</h3>
+      <div class="control-row">
+        <div class="checkbox-container">
+          <input type="checkbox" id="checkbox_elgamal" checked>
+          <label for="checkbox_elgamal">Enable</label>
+        </div>
+        <div class="input-container">
+          <label for="iterations_elgamal">Iterations:</label>
+          <input type="number" id="iterations_elgamal" value="30000" min="1">
+        </div>
+      </div>
+    </div>
+
+    <div class="algorithm-section">
+      <h3>Crypto.js Signature</h3>
+      <div class="control-row">
+        <div class="checkbox-container">
+          <input type="checkbox" id="checkbox_cryptosig" checked>
+          <label for="checkbox_cryptosig">Enable</label>
+        </div>
+        <div class="input-container">
+          <label for="iterations_cryptosig">Iterations:</label>
+          <input type="number" id="iterations_cryptosig" value="30000" min="1">
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="button-row">
@@ -121,6 +154,18 @@
   <h2>Crystals Dilithium Benchmark Graphs</h2>
   <h3>Time Benchmark (Minutes)</h3>
   <canvas id="crystalsTimeChart"></canvas>
+</div>
+
+<div id="elgamalGraphs" class="chartContainer">
+  <h2>ElGamal Benchmark Graphs</h2>
+  <h3>Time Benchmark (Minutes)</h3>
+  <canvas id="elgamalTimeChart"></canvas>
+</div>
+
+<div id="cryptosignatureGraphs" class="chartContainer">
+  <h2>CryptoSignature Benchmark Graphs</h2>
+  <h3>Time Benchmark (Minutes)</h3>
+  <canvas id="cryptosignatureTimeChart"></canvas>
 </div>
 
 <script type="module" src="scripts/main.js"></script>

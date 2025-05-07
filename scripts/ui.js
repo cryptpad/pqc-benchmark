@@ -5,6 +5,8 @@ import { benchmarkMLDilithium } from "./benchmarks/ml-dilithium.js";
 import { benchmarkFalcon } from "./benchmarks/falcon.js";
 import { benchmarkCrystalsDilithium } from "./benchmarks/crystals.js";
 import { benchmarkSPHINCS } from "./benchmarks/sphincs.js";
+import { benchmarkElGamal } from "./benchmarks/elgamal.js";
+import { benchmarkCryptoSignature } from "./benchmarks/cryptosignature.js";
 
 let benchmarkResults = {};
 
@@ -15,18 +17,24 @@ export async function runAllBenchmarks() {
   const falconEnabled    = document.getElementById("checkbox_falcon").checked;
   const crystalsEnabled  = document.getElementById("checkbox_crystals").checked;
   const sphincsEnabled   = document.getElementById("checkbox_sphincs").checked;
+  const elgamalEnabled   = document.getElementById("checkbox_elgamal").checked;
+  const cryptosignatureEnabled = document.getElementById("checkbox_cryptosig").checked;
 
   const iterKyber      = Number(document.getElementById("iterations_kyber").value) || 30000;
   const iterMLDil      = Number(document.getElementById("iterations_ml_dilithium").value) || 30000;
   const iterFalcon     = Number(document.getElementById("iterations_falcon").value) || 30000;
   const iterCrystals   = Number(document.getElementById("iterations_crystals").value) || 30000;
   const iterSphincs    = Number(document.getElementById("iterations_sphincs").value) || 30000;
+  const iterElgamal    = Number(document.getElementById("iterations_elgamal").value) || 30000;
+  const iterCryptoSign = Number(document.getElementById("iterations_cryptosig").value) || 30000;
 
   if (kyberEnabled)    await benchmarkKyber(iterKyber, benchmarkResults);
   if (mlDilEnabled)    await benchmarkMLDilithium(iterMLDil, benchmarkResults);
   if (falconEnabled)   await benchmarkFalcon(iterFalcon, benchmarkResults);
   if (crystalsEnabled) await benchmarkCrystalsDilithium(iterCrystals, benchmarkResults);
   if (sphincsEnabled)  await benchmarkSPHINCS(iterSphincs, benchmarkResults);
+  if (elgamalEnabled)  await benchmarkElGamal(iterElgamal, benchmarkResults);
+  if (cryptosignatureEnabled) await benchmarkCryptoSignature(iterCryptoSign, benchmarkResults);
 
   document.getElementById("downloadBtn").style.display = "block";
   generateGraphs();
@@ -165,6 +173,40 @@ function generateSizesTable() {
       tableBody.appendChild(row);
     }
   }
+
+  if (benchmarkResults.ElGamal) {
+    const iterElgamal = Number(document.getElementById("iterations_elgamal").value) || 30000;
+    const row = document.createElement("tr");
+    const data = benchmarkResults.ElGamal;
+    const keySize = extractSize(data, ['keySize', 'publicKeySize']);
+    const ciphertextSize = extractSize(data, ['ciphertextSize']);
+    const cumulativeSize = (keySize + ciphertextSize) * iterElgamal;
+
+    row.innerHTML = `
+      <td>ElGamal</td>
+      <td>${keySize}</td>
+      <td>${ciphertextSize}</td>
+      <td>${cumulativeSize.toLocaleString()}</td>
+    `;
+    tableBody.appendChild(row);
+  }
+
+  if (benchmarkResults.CryptoSignature) {
+    const iterCryptoSign = Number(document.getElementById("iterations_cryptosig").value) || 30000;
+    const row = document.createElement("tr");
+    const data = benchmarkResults.CryptoSignature;
+    const keySize = extractSize(data, ['keySize', 'publicKeySize']);
+    const signatureSize = extractSize(data, ['signatureSize']);
+    const cumulativeSize = (keySize + signatureSize) * iterCryptoSign;
+
+    row.innerHTML = `
+      <td>CryptoSignature</td>
+      <td>${keySize}</td>
+      <td>${signatureSize}</td>
+      <td>${cumulativeSize.toLocaleString()}</td>
+    `;
+    tableBody.appendChild(row);
+  }
 }
 
 function generateGraphs() {
@@ -173,6 +215,8 @@ function generateGraphs() {
   generateFalconChart();
   generateCrystalsChart();
   generateSPHINCSChart();
+  generateElGamalChart();
+  generateCryptoSignatureChart();
 }
 
 function generateKyberChart() {
@@ -333,6 +377,94 @@ function generateSPHINCSChart() {
   document.getElementById("sphincsGraphs").style.display = "block";
 }
 
+function generateElGamalChart() {
+  if (!benchmarkResults.ElGamal) {
+    document.getElementById("elgamalGraphs").style.display = "none";
+    return;
+  }
+
+  document.getElementById("elgamalGraphs").style.display = "block";
+
+  const keyGenTime = benchmarkResults.ElGamal.keyGenTime && 
+                    typeof benchmarkResults.ElGamal.keyGenTime === 'object' ?
+                    convertMsToMinutes(benchmarkResults.ElGamal.keyGenTime.value) : 0;
+  
+  const encryptTime = benchmarkResults.ElGamal.encryptTime && 
+                     typeof benchmarkResults.ElGamal.encryptTime === 'object' ?
+                     convertMsToMinutes(benchmarkResults.ElGamal.encryptTime.value) : 0;
+  
+  const decryptTime = benchmarkResults.ElGamal.decryptTime && 
+                     typeof benchmarkResults.ElGamal.decryptTime === 'object' ?
+                     convertMsToMinutes(benchmarkResults.ElGamal.decryptTime.value) : 0;
+
+  createChart("elgamalTimeChart", {
+    type: "bar",
+    data: {
+      labels: ["ElGamal"],
+      datasets: [
+        { label: "KeyGen Time (min)", data: [keyGenTime], backgroundColor: "rgba(54, 162, 235, 0.6)", yAxisID: "y" },
+        { label: "Encrypt Time (min)", data: [encryptTime], backgroundColor: "rgba(255, 99, 132, 0.6)", yAxisID: "y" },
+        { label: "Decrypt Time (min)", data: [decryptTime], backgroundColor: "rgba(75, 192, 192, 0.6)", yAxisID: "y" }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true, title: { display: true, text: "Time (min)" } }
+      }
+    }
+  });
+}
+
+function generateCryptoSignatureChart() {
+  const container = document.getElementById("cryptosignatureGraphs");
+
+  if (!benchmarkResults.CryptoSignature) {
+    container.style.display = "none";
+    return;
+  }
+
+  container.style.display = "block";
+
+  try {
+    const keyGenTime = benchmarkResults.CryptoSignature.keyGenTime ?
+        (benchmarkResults.CryptoSignature.keyGenTime.value !== undefined ?
+            convertMsToMinutes(benchmarkResults.CryptoSignature.keyGenTime.value) :
+            convertMsToMinutes(benchmarkResults.CryptoSignature.keyGenTime)) : 0;
+
+    const signingTime = benchmarkResults.CryptoSignature.signingTime ?
+        (benchmarkResults.CryptoSignature.signingTime.value !== undefined ?
+            convertMsToMinutes(benchmarkResults.CryptoSignature.signingTime.value) :
+            convertMsToMinutes(benchmarkResults.CryptoSignature.signingTime)) : 0;
+
+    const verificationTime = benchmarkResults.CryptoSignature.verificationTime ?
+        (benchmarkResults.CryptoSignature.verificationTime.value !== undefined ?
+            convertMsToMinutes(benchmarkResults.CryptoSignature.verificationTime.value) :
+            convertMsToMinutes(benchmarkResults.CryptoSignature.verificationTime)) : 0;
+
+    createChart("cryptosignatureTimeChart", {
+      type: "bar",
+      data: {
+        labels: ["CryptoSignature"],
+        datasets: [
+          { label: "KeyGen Time (min)", data: [keyGenTime], backgroundColor: "rgba(54, 162, 235, 0.6)", yAxisID: "y" },
+          { label: "Signing Time (min)", data: [signingTime], backgroundColor: "rgba(255, 99, 132, 0.6)", yAxisID: "y" },
+          { label: "Verification Time (min)", data: [verificationTime], backgroundColor: "rgba(75, 192, 192, 0.6)", yAxisID: "y" }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true, title: { display: true, text: "Time (min)" } }
+        }
+      }
+    });
+  } catch (error) {
+    console.error("Error generating CryptoSignature chart:", error);
+    container.innerHTML += `<p class="error">Failed to generate chart: ${error.message}</p>`;
+  }
+}
+
 export function setupUI() {
   document.getElementById("startBtn").addEventListener("click", runAllBenchmarks);
   document.getElementById("downloadBtn").addEventListener("click", () => {
@@ -345,4 +477,3 @@ export function setupUI() {
     document.body.removeChild(a);
   });
 }
-
