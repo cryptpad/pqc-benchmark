@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2025 XWiki CryptPad Team <contact@cryptpad.org> and Iulian-Tudor Scutaru
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 # Post-Quantum Cryptography Benchmark
 
 A browser-based tool for measuring and comparing performance characteristics of post-quantum cryptographic algorithms.

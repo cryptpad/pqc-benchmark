@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2025 XWiki CryptPad Team <contact@cryptpad.org> and Iulian-Tudor Scutaru
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { measureTime, formatBytes } from "../utils/benchmarking.js";
 
 export async function benchmarkCryptoSignature(iterations, results) {

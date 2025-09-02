@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2025 XWiki CryptPad Team <contact@cryptpad.org> and Iulian-Tudor Scutaru
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import dilithiumCrystals from "https://cdn.jsdelivr.net/npm/dilithium-crystals@1.0.6/+esm";
 import { measureTime, convertMsToSeconds, formatBytes } from "../utils/benchmarking.js";
 

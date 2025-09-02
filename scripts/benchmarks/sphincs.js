@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2025 XWiki CryptPad Team <contact@cryptpad.org> and Iulian-Tudor Scutaru
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { utf8ToBytes, randomBytes } from "https://cdn.jsdelivr.net/npm/@noble/post-quantum/utils/+esm";
 import { slh_dsa_sha2_128f, slh_dsa_sha2_192f, slh_dsa_sha2_256f } from "https://cdn.jsdelivr.net/npm/@noble/post-quantum/slh-dsa/+esm";
 import { measureTime, convertMsToSeconds, formatBytes } from "../utils/benchmarking.js";

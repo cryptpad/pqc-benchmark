@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2025 XWiki CryptPad Team <contact@cryptpad.org> and Iulian-Tudor Scutaru
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { createChart } from "./utils/chart-utils.js";
 import { convertMsToMinutes } from "./utils/benchmarking.js";
 import { benchmarkKyber } from "./benchmarks/kyber.js";
